@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "369356427174",
+    "project_id": "dev-template-ce135",
+    "storage_bucket": "dev-template-ce135.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369356427174:android:cec9bdea8902f9f56f8967",
+        "android_client_info": {
+          "package_name": "com.timothy.template"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALS2GrHDyGybyqr8RUwPbLSXQchuwynF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
