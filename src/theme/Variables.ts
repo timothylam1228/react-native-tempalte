@@ -24,6 +24,14 @@ export const Colors = {
   //ComponentColors
   circleButtonBackground: '#E1E1EF',
   circleButtonColor: '#44427D',
+  secondary: '#00FF00',
+  tertiary: '#0000FF',
+  background: '#FFFFFF',
+  text: '#000000',
+  accent: '#FFFF00',
+  danger: '#FF0000',
+  warning: '#FFA500',
+  info: '#808080',
 };
 
 export const NavigationColors: Partial<ThemeNavigationColors> = {

@@ -1,15 +1,15 @@
 import React from 'react';
-import { Example } from '../screens';
-import { createStackNavigator } from '@react-navigation/stack';
+import { Example, Home } from '../screens';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-// @refresh reset
 const MainNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Example" component={Example} />
-    </Stack.Navigator>
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Example" component={Example} />
+    </Tab.Navigator>
   );
 };
 

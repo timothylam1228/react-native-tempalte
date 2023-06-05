@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   ActivityIndicator,
@@ -8,16 +8,21 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Brand } from '../../components';
 import { useTheme } from '../../hooks';
-import { useLazyFetchOneQuery } from '../../services/modules/users';
+// import { useLazyFetchOneQuery } from '../../services/modules/users';
+import { useLazyFetchAllQuery } from '../../services/modules/categories';
 import { changeTheme, ThemeState } from '../../store/theme';
 import i18next from 'i18next';
 import { auth } from '../../services/firebase';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { useNavigation } from '@react-navigation/native';
+import { signOut } from 'firebase/auth';
+import {
+  setCategory,
+  CategoryPayload,
+  CategoryState,
+} from '../../store/category';
 
 const Example = () => {
   const { t } = useTranslation(['example', 'welcome']);
@@ -30,25 +35,21 @@ const Example = () => {
     darkMode: isDark,
   } = useTheme();
   const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const [fetchOne, { data, isSuccess, isLoading, isFetching }] =
-    useLazyFetchOneQuery();
+  // const [fetchOne, { data, isSuccess, isLoading, isFetching }] =
+  //   useLazyFetchOneQuery();
 
-  const [initializing, setInitializing] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [fetchAll, { data, isSuccess, isLoading, isFetching }] =
+    useLazyFetchAllQuery();
 
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      setLoggedIn(true);
-    } else {
-      console.log('hi');
-      setLoggedIn(false);
-    }
-  });
+  const currentCategory = useSelector(
+    (state: { category: CategoryState }) => state.category.categories,
+  );
 
   useEffect(() => {
-    if (isSuccess && data?.name) {
-      Alert.alert(t('example:helloUser', { name: data.name }));
+    if (isSuccess) {
+      Alert.alert(t('example:helloUser', { name: data }));
+    } else {
+      // console.log(data);
     }
   }, [isSuccess, data]);
 
@@ -59,6 +60,23 @@ const Example = () => {
 
   const onChangeLanguage = (lang: 'fr' | 'en') => {
     i18next.changeLanguage(lang);
+  };
+
+  const fetchAllCategories = async () => {
+    await fetchAll()
+      .then(response => {
+        const result = response.data?.data!;
+        const parsedPayload: CategoryPayload[] = result.map(
+          (item: CategoryPayload) => ({
+            attributes: item.attributes,
+            id: item.id,
+          }),
+        );
+        dispatch(setCategory(parsedPayload));
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
@@ -183,6 +201,11 @@ const Example = () => {
           resizeMode={'contain'}
         />
       </View>
+      {currentCategory &&
+        currentCategory.length > 0 &&
+        currentCategory.map(item => {
+          return <Text key={item.attributes.tag}>{item.attributes.name}</Text>;
+        })}
       <View
         style={[
           Layout.fill,
@@ -214,10 +237,10 @@ const Example = () => {
         >
           <TouchableOpacity
             style={[Common.button.circle, Gutters.regularBMargin]}
-            // onPress={() => fetchOne(`${Math.ceil(Math.random() * 10 + 1)}`)}
-            onPress={() => {
-              return navigation.navigate('Login');
-            }}
+            onPress={fetchAllCategories}
+            // onPress={() => {
+            //   return navigation.navigate('Login');
+            // }}
           >
             {isFetching || isLoading ? (
               <ActivityIndicator />
