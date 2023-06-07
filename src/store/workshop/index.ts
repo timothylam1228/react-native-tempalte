@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+export type WorkshopState = {
+  workshops: WorkshopPayload[];
+}
 export interface WorkshopPayload {
   attributes: WorkshopAttributes;
   id: number;

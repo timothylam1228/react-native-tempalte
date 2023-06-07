@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   View,
   ActivityIndicator,
   Text,
   StyleSheet,
-  ScrollView,
-  Image,
   StatusBar,
-  Button,
   FlatList,
+  Pressable,
 } from 'react-native';
 import { useLazyFetchAllWorkshopQuery } from '../../services/modules/workshops';
 import { useTheme } from '../../hooks';
-import { useDispatch, useSelector } from 'react-redux';
-import { setWorkshop, WorkshopPayload } from '../../store/workshop';
-import Workshop from '../../../src/components/Workshop/Workshop';
+import { useDispatch } from 'react-redux';
+import { setWorkshop } from '../../store/workshop';
+import Workshop from '../../components/Workshop/Workshop';
 import useWorkshop from '../../hooks/useWorkshop';
+// import useCategory from '../../hooks/useCategory';
+import ChipsContainer from '../../components/Category/ChipsContainer';
 const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
@@ -28,19 +28,11 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen = () => {
-  const {
-    Common,
-    Fonts,
-    Gutters,
-    Layout,
-    Images,
-    Colors,
-    darkMode: isDark,
-  } = useTheme();
+  const { Common, Layout } = useTheme();
 
   const { workshops } = useWorkshop();
 
-  const [fetchAllWorkshop, { data, isSuccess, isLoading, isFetching }] =
+  const [fetchAllWorkshop, { isLoading, isFetching }] =
     useLazyFetchAllWorkshopQuery();
 
   const dispatch = useDispatch();
@@ -67,6 +59,7 @@ const HomeScreen = () => {
     );
   };
 
+  // console.log('categoies',categoies)
   return (
     <View style={Layout.fill}>
       {isLoading || isFetching ? (
@@ -74,17 +67,17 @@ const HomeScreen = () => {
       ) : (
         <View style={[Layout.fullWidth, styles.contentContainer]}>
           <Text>
-            <Button
-              title="Test"
-              style={Common.buttonPrimary}
-              onPress={handlePress}
-            />
+            <Pressable style={Common.buttonPrimary} onPress={handlePress}>
+              <Text>Test</Text>
+            </Pressable>
           </Text>
+          <View>
+            <ChipsContainer />
+          </View>
           <View style={styles.workshopContainer}>
             <FlatList
               data={workshops}
               renderItem={({ item }) => <Workshop workshop={item} />}
-              keyExtractor={item => item.id}
               ItemSeparatorComponent={itemSeparator}
             />
           </View>

@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
-import { WorkshopPayload } from '../store/workshop';
+import { WorkshopState } from '../store/workshop';
 
 export default function () {
   const workshops = useSelector(
-    (state: { workshop: WorkshopPayload[] }) => state.workshop,
+    (state: { workshop: WorkshopState }) => state.workshop,
   );
   return workshops;
 }
